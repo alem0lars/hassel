@@ -3,17 +3,17 @@ Created on Sep 15, 2012
 
 @author: peyman kazemian
 '''
-from examples.utils.network_loader import load_network
+from examples.example_utils.network_loader import load_network
 from config_parser.cisco_router_parser import cisco_router
 from utils.wildcard import wildcard_create_bit_repeat
 from utils.wildcard_utils import set_header_field
-from headerspace.hs import headerspace
+# from headerspace.hs import headerspace
 from time import time
 import json
-from headerspace.applications import find_reachability,print_paths
+# from headerspace.applications import find_reachability,print_paths
 
-in_path = "stanford_json_rules/tf_rules"
-out_path = "stanford_json_rules"
+in_path = "tf_stanford_backbone"
+out_path = in_path
 
 PORT_TYPE_MULTIPLIER = 10000
 SWITCH_ID_MULTIPLIER = 100000
@@ -47,6 +47,38 @@ for rule in topo["rules"]:
       
 for rtr_name in rtr_names:
   tf = json.load(open(in_path+"/"+rtr_name+".tf.json"))
+
+  # TODO ALE
+  #
+  # Ogni file tf.json contiene:
+  #             > import pprint; pprint.PrettyPrinter(indent=4, depth=2).pprint(tf)
+  #
+  # { u'lazy_eval_active': False,
+  #   u'lazy_eval_bytes': [],
+  #   u'length': 16,
+  #   u'next_id': 990,
+  #   u'prefix_id': u'bbra_rtr',
+  #   u'rules': [ {...}, ... ]}
+  #
+  # Dove ogni rule e' del tipo:
+  #             > import pprint; pprint.PrettyPrinter(indent=4).pprint(tf['rules'][0])
+  #
+  # { u'action': u'fwd',
+  #   u'affected_by': [],
+  #   u'file': u'',
+  #   u'id': u'bbra_rtr_1',
+  #   u'in_ports': [100034],
+  #   u'influence_on': [],
+  #   u'inverse_match': None,
+  #   u'inverse_rewrite': None,
+  #   u'line': [],
+  #   u'mask': None,
+  #   u'match': u'xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,00000010,01001110',
+  #   u'out_ports': [100000],
+  #   u'rewrite': None}
+  #
+  # TODO ALE END
+
   table_id += 1
   tf_in = {"rules":[], "ports":[], "id":table_id*10}
   tf_mid = {"rules":[], "ports":[], "id":table_id*10+1}
@@ -61,6 +93,10 @@ for rtr_name in rtr_names:
     rule.pop("inverse_match")
     rule.pop("inverse_rewrite")
     rule.pop("id")
+    # TODO ALE
+    if len(rule["in_ports"]) == 0:
+        continue
+    # TODO ALE END
     if (rule["in_ports"][0] % SWITCH_ID_MULTIPLIER == 0):
       mid_port = table_id * SWITCH_ID_MULTIPLIER + 2 * PORT_TYPE_MULTIPLIER
       rule["in_ports"] = [mid_port]

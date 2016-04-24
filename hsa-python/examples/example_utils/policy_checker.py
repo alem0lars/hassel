@@ -6,7 +6,7 @@ Created on Sep 15, 2012
 import sys
 sys.path.append("../..")
 import json, socket
-from examples.utils.net_plumber_policy_maker import NetPlumberReachabilityPolicyGenerator
+from examples.example_utils.net_plumber_policy_maker import NetPlumberReachabilityPolicyGenerator
 
 def send_command(s,data):
   for d in data:

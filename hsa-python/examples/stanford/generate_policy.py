@@ -3,7 +3,7 @@ Created on Sep 18, 2012
 
 @author: peymank
 '''
-from examples.utils.net_plumber_policy_maker import NetPlumberReachabilityPolicyGenerator
+from examples.example_utils.net_plumber_policy_maker import NetPlumberReachabilityPolicyGenerator
 import json 
 
 in_path = "stanford_json_rules"
