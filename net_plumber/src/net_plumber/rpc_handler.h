@@ -45,7 +45,7 @@ private:
   FN(add_rule); FN(remove_rule);
   FN(add_source); FN(remove_source);
   FN(add_source_probe); FN(remove_source_probe);
-  FN(print_table);
+  FN(print_table); FN(show_npg);
 #undef FN
 };
 

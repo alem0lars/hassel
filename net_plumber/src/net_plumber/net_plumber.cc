@@ -468,6 +468,37 @@ void NetPlumber::print_table(uint32_t id) {
   }
 }
 
+/**
+ * New version of print_table that returns content instead of printing it.
+ *
+ * by alem0lars
+ */
+std::string NetPlumber::show_table(uint32_t id) {
+  std::stringstream ss;
+
+  // Table info
+  ss << "Table: ";
+  ss << id;
+  ss << std::endl;
+
+  // Ports info
+  List_t ports = this->table_to_ports[id];
+  ss << "Ports: ";
+  ss << list_to_string(ports);
+  ss << std::endl;
+
+  // Rules info
+  list<RuleNode*>* rules_list = table_to_nodes[id];
+  list<RuleNode*>::iterator it;
+  ss << "Rules:" << std::endl;
+  for (it = rules_list->begin() ; it != rules_list->end(); it++ ) {
+    ss << (*it)->to_string();
+    ss << std::endl;
+  }
+
+  return ss.str();
+}
+
 uint64_t NetPlumber::_add_rule(uint32_t table,int index,
                                bool group, uint64_t gid,
                                List_t in_ports, List_t out_ports,
@@ -675,6 +706,42 @@ void NetPlumber::print_plumbing_network() {
   for (it2 = probes.begin(); it2 != probes.end(); it2++) {
     printf("%s\n",(*it2)->to_string().c_str());
   }
+}
+
+/**
+ * New version of print_plumbing_network that returns content instead of
+ * printing it.
+ *
+ * by alem0lars
+ */
+std::string NetPlumber::show_npg() {
+  std::stringstream ss;
+
+  // Tables
+  map<uint32_t,std::list<RuleNode*>* >::iterator it;
+  for (it = table_to_nodes.begin(); it != table_to_nodes.end(); it++) {
+    ss << this->show_table((*it).first);
+  }
+  ss << std::endl;
+
+  // Sources and Sinks
+  ss << "Sources and Sinks:";
+  ss << std::endl;
+  list<Node *>::iterator it2;
+  for (it2 = flow_nodes.begin(); it2 != flow_nodes.end(); it2++) {
+    ss << (*it2)->to_string();
+    ss << std::endl;
+  }
+
+  // Probes
+  ss << "Probes:";
+  ss << std::endl;
+  for (it2 = probes.begin(); it2 != probes.end(); it2++) {
+    ss << (*it2)->to_string();
+    ss << std::endl;
+  }
+
+  return ss.str();
 }
 
 void NetPlumber::get_pipe_stats(uint64_t node_id,int &fwd_pipeline,

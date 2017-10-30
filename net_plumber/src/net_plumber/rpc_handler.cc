@@ -114,7 +114,7 @@ void RpcHandler::initServer (TcpServer &server) {
     FN(add_rule), FN(remove_rule),
     FN(add_source), FN(remove_source),
     FN(add_source_probe), FN(remove_source_probe),
-    FN(print_table)
+    FN(print_table), FN(show_npg)
   };
   int n = sizeof methods / sizeof *methods;
   for (int i = 0; i < n; i++)
@@ -237,9 +237,11 @@ PROTO(remove_source_probe)
 
 PROTO(print_table)
   uint64_t id = PARAM(id).asUInt();
-  netPlumber->print_table(id);
-  RETURN(VOID);
+  RETURN(netPlumber->show_table(id));
+}
+
+PROTO(show_npg)
+  RETURN(netPlumber->show_npg());
 }
 
 }
-

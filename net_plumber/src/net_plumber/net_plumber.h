@@ -156,6 +156,8 @@ namespace net_plumber {
     void remove_table(uint32_t id);
     List_t get_table_ports(uint32_t id);
     void print_table(uint32_t id);
+    std::string show_table(uint32_t id);
+    std::string show_npg();
 
     /*
      * Rule Management:
