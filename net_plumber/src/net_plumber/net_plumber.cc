@@ -718,28 +718,36 @@ std::string NetPlumber::show_npg() {
   std::stringstream ss;
 
   // Tables
+  ss << "Tables:";
+  ss << std::endl;
+  ss << std::endl;
   map<uint32_t,std::list<RuleNode*>* >::iterator it;
   for (it = table_to_nodes.begin(); it != table_to_nodes.end(); it++) {
     ss << this->show_table((*it).first);
+    ss << std::endl;
   }
   ss << std::endl;
 
   // Sources and Sinks
   ss << "Sources and Sinks:";
   ss << std::endl;
+  ss << std::endl;
   list<Node *>::iterator it2;
   for (it2 = flow_nodes.begin(); it2 != flow_nodes.end(); it2++) {
     ss << (*it2)->to_string();
     ss << std::endl;
   }
+  ss << std::endl;
 
   // Probes
   ss << "Probes:";
+  ss << std::endl;
   ss << std::endl;
   for (it2 = probes.begin(); it2 != probes.end(); it2++) {
     ss << (*it2)->to_string();
     ss << std::endl;
   }
+  ss << std::endl;
 
   return ss.str();
 }
